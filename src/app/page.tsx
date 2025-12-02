@@ -27,14 +27,22 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const [size] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
-    const res = await fetch(
-      `http://localhost:8000/api/laporan?page=${page}&size=${size}`
-    );
-    const json: LaporanResponse = await res.json();
-    setData(json.data);
-    setTotalPages(json.totalPages);
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `http://localhost:8000/api/laporan?page=${page}&size=${size}`
+      );
+      const json: LaporanResponse = await res.json();
+      setData(json.data);
+      setTotalPages(json.totalPages);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -79,20 +87,31 @@ export default function Home() {
         </thead>
 
         <tbody>
-          {data.map((row, index) => (
-            <tr key={index} className="text-center">
-              <td className="p-2 border">{row.m_number}</td>
-              <td className="p-2 border">{row.nim}</td>
-              <td className="p-2 border">{row.nama}</td>
-              <td className="p-2 border">{row.jenis_kelamin}</td>
-              <td className="p-2 border">{row.jurusan}</td>
-              <td className="p-2 border">{row.ipk}</td>
-              <td className="p-2 border">{row.kode_mk}</td>
-              <td className="p-2 border">{row.nama_mk}</td>
-              <td className="p-2 border">{row.dosen}</td>
-              <td className="p-2 border">{row.sks}</td>
+          {loading ? (
+            <tr>
+              <td colSpan={10} className="text-center py-10">
+                <div className="flex flex-col items-center justify-center">
+                  <div className="w-8 h-8 border-4 border-blue-500 border-dashed rounded-full animate-spin mb-2"></div>
+                  <span>Loading...</span>
+                </div>
+              </td>
             </tr>
-          ))}
+          ) : (
+            data.map((row, index) => (
+              <tr key={index} className="text-center">
+                <td className="p-2 border">{row.m_number}</td>
+                <td className="p-2 border">{row.nim}</td>
+                <td className="p-2 border">{row.nama}</td>
+                <td className="p-2 border">{row.jenis_kelamin}</td>
+                <td className="p-2 border">{row.jurusan}</td>
+                <td className="p-2 border">{row.ipk}</td>
+                <td className="p-2 border">{row.kode_mk}</td>
+                <td className="p-2 border">{row.nama_mk}</td>
+                <td className="p-2 border">{row.dosen}</td>
+                <td className="p-2 border">{row.sks}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
 
