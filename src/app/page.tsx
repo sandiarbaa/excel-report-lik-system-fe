@@ -41,12 +41,8 @@ export default function Home() {
     fetchData();
   }, [page]);
 
-  const handleDownload = () => {
-    window.location.href = `http://localhost:8000/api/export/laporan`;
-  };
-
   const handleDownloadWithWA = async () => {
-    const recruiterPhone = "6283841330243";
+    const recruiterPhone = "6281287765396";
     const message = encodeURIComponent(
       "Halo kak, berikut laporan Excel mahasiswa. Silakan cek ya 🙏"
     );
@@ -59,13 +55,6 @@ export default function Home() {
 
   return (
     <div className="p-6">
-      <button
-        onClick={handleDownload}
-        className="px-4 py-2 bg-blue-600 text-white rounded mb-4"
-      >
-        Download Excel
-      </button>
-      <br />
       <button
         onClick={handleDownloadWithWA}
         className="px-4 py-2 bg-blue-600 text-white rounded mb-4"
